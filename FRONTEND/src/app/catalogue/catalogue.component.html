@@ -1,0 +1,31 @@
+
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1" [(ngModel)]="term">
+</div>
+
+<div class="album py-5 bg-light">
+<div class="card text-center" *ngFor="let p of catalogue$ | async | productFilter:term">
+    <div>
+      {{ p.id }}
+    </div>
+    <div>
+      Marque : {{ p.brand }}
+    </div>
+    <div>
+      Model : {{ p.model }}
+    </div>
+    <div>
+        Prix : {{ p.prix }} €
+    </div>
+    <div class="container">
+    <div class="row justify-content-md-center">
+      <div class="col-md-auto"> 
+        <button (click)="addProduct(p.id)">Ajouter</button>
+      </div>
+      <div class="col-md-auto">
+        <a [routerLink]="['/details-produit', p.id]"><button>Details</button></a>
+      </div>      
+    </div>
+  </div>
+</div>
+</div>

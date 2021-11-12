@@ -1,0 +1,8 @@
+<p>panier works!</p>
+
+<div class="card text-center" *ngFor="let p of liste$ | async ">
+    <div>
+        {{p.brand}} {{p.model}}
+    </div>
+    <button (click)="deleteProduct(p.id)">Supprimer</button>
+</div>

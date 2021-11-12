@@ -1,0 +1,160 @@
+<div class=" text-center">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmitForm()">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="form-group">
+                    <div *ngIf="prenom && prenom.invalid && (prenom.dirty || prenom.touched)" class="aler alert-danger">
+                        <div *ngIf="prenom.errors?.required">
+                            Prénom obligatoire
+                        </div> 
+                        <div *ngIf="prenom.errors?.pattern">
+                            Le prénom ne peut contenir que des lettres, des tirets, des points ou des espaces (>1)
+                        </div>                              
+                    </div>
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom" class="form-control" formControlName="prenom" required>                     
+                </div>
+                <div class="form-group">
+                    <div *ngIf="nom && nom.invalid && (nom.dirty || nom.touched)" class="aler alert-danger">
+                        <div *ngIf="nom.errors?.required">
+                            Nom obligatoire
+                        </div> 
+                        <div *ngIf="nom.errors?.pattern">
+                            Le nom ne peut contenir que des lettres, des tirets, des points ou des espaces (2-25)
+                        </div>                              
+                    </div>
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" class="form-control" formControlName="nom">            
+                </div>
+          
+                <div class="form-group">
+                    <div *ngIf="cp && cp.invalid && (cp.dirty || cp.touched)" class="aler alert-danger">
+                        <div *ngIf="cp.errors?.required">
+                            Code postal obligatoire.
+                        </div> 
+                        <div *ngIf="cp.errors?.pattern">
+                            Le code postal doit contenir 5 chiffres.
+                        </div>                              
+                    </div>
+                    <label for="cp">Code Postal</label>
+                    <input type="text" id="cp" class="form-control" formControlName="cp">            
+                </div>
+                <div class="form-group">
+                    <div *ngIf="ville && ville.invalid && (ville.dirty || ville.touched)" class="aler alert-danger">
+                        <div *ngIf="ville.errors?.required">
+                            Ville obligatoire.
+                        </div> 
+                        <div *ngIf="ville.errors?.pattern">
+                            La ville Le nom ne peut contenir que des lettres, des tirets, des points ou des espaces.
+                        </div>                              
+                    </div>
+                    <label for="ville">Ville</label>
+                    <input type="text" id="ville" class="form-control" formControlName="ville">            
+                </div>
+                <div class="form-group">
+                    <div *ngIf="tel && tel.invalid && (tel.dirty || tel.touched)" class="aler alert-danger">
+                        <div *ngIf="tel.errors?.required">
+                            Téléphone obligatoire.
+                        </div> 
+                        <div *ngIf="tel.errors?.pattern">
+                            Le téléphone ne peut contenir que 10 chiffres.
+                        </div>                              
+                    </div>
+                    <label for="tel">Téléphone</label>
+                    <input type="text" id="tel" class="form-control" formControlName="tel">            
+                </div>
+                <div class="form-group">
+                    <div *ngIf="pays && pays.invalid && (pays.dirty || pays.touched)" class="aler alert-danger">
+                        <div *ngIf="pays.errors?.required">
+                            Pays obligatoire.
+                        </div> 
+                        <div *ngIf="pays.errors?.pattern">
+                            Le pays ne peut contenir que des lettres, des tirets, des points et des espaces.
+                        </div>                              
+                    </div>
+                    <label for="pays">Pays</label>
+                    <input type="text" id="pays" class="form-control" formControlName="pays">            
+                </div>      
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="form-group">
+                    <div *ngIf="email && email.invalid && (email.dirty || email.touched)" class="aler alert-danger">
+                        <div *ngIf="email.errors?.required">
+                            Email obligatoire.
+                        </div> 
+                        <div *ngIf="email.errors?.email">
+                            L'email doit être valide.
+                        </div>                              
+                    </div>
+                    <label for="email">Adresse email</label>
+                    <input type="text" id="email" class="form-control" formControlName="email">            
+                </div>
+                <div class="form-group">
+                    <div *ngIf="civilite && civilite.invalid && (civilite.dirty || civilite.touched)" class="aler alert-danger">
+                        <div *ngIf="civilite.errors?.required">
+                            Civilité obligatoire.
+                        </div>                              
+                    </div>
+                    <label for="civilite">Civilité</label>
+                    <select class="form-control" id="civilite" formControlName="civilite" required>
+                        <option value>Choisir...</option>
+                        <option>Mr</option>
+                        <option>Mme</option>
+                        <option>Autre</option>
+                    </select>            
+                </div>
+                <div class="form-group">
+                    <div *ngIf="login && login.invalid && (login.dirty || login.touched)" class="aler alert-danger">
+                        <div *ngIf="login.errors?.required">
+                            Nom d'utilistateur obligatoire.
+                        </div>
+                        <div *ngIf="login.errors?.pattern">
+                            Le nom d'utilisateur ne peut contenir que des lettres, des tirets et des points.
+                        </div>                                     
+                    </div>
+                    <label for="login">Nom d'utilisateur</label>
+                    <input type="text" id="login" class="form-control" formControlName="login">            
+                </div>
+                <div class="form-group">
+                    <div *ngIf="password && password.invalid && (password.dirty || password.touched)" class="aler alert-danger">
+                        <div *ngIf="password.errors?.required">
+                            Civilité obligatoire.
+                        </div>                              
+                    </div>
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" class="form-control" formControlName="password">            
+                </div>
+                <div class="form-group">
+                    <div *ngIf="verifPsswd && verifPsswd.invalid && (verifPsswd.dirty || verifPsswd.touched)" class="aler alert-danger">
+                        <div *ngIf="verifPsswd.errors?.required">
+                            Ce champ est obligatoire.
+                        </div>                              
+                    </div>
+                    <div *ngIf="userForm.errors?.passwordVerif && (userForm.touched || userForm.dirty)" class="cross-validation-error-message alert alert-danger">
+                        Le mot de passe n'est pas le même.
+                    </div>
+                    <label for="verifPsswd">Vérification du mot de passe</label>
+                    <input type="password" id="verifPsswd" class="form-control" formControlName="verifPsswd">            
+                </div>
+                <div class="form-group">
+                    <div *ngIf="adresse && adresse.invalid && (adresse.dirty || adresse.touched)" class="aler alert-danger">
+                        <div *ngIf="adresse.errors?.required">
+                            Adresse obligatoire.
+                        </div>
+                        <div *ngIf="adresse.errors?.pattern">
+                            L'adresse peut contenir beaucoup de choses... tu dois sûrement te douter du caractère qui pose problème.
+                        </div>                                     
+                    </div>
+                    <label for="adresse">Adresse</label>
+                    <input type="text" id="adresse" class="form-control mb-3" formControlName="adresse">            
+                </div>
+            </div>
+
+        </div>        
+        <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Valider</button>
+    </form>
+</div>
+
+<div *ngIf="!userForm.invalid && submitted">
+    <app-recap [newUser] = "newUser"></app-recap>
+</div>

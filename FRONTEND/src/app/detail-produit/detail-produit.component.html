@@ -1,0 +1,21 @@
+<div class="album py-5 bg-light">
+    <div class="card text-center" *ngFor="let p of catalogue$ | async ">
+        <div class *ngIf="p.id == id">
+        <div>
+          {{ p.id }}
+        </div>
+        <div>
+          Marque : {{ p.brand }}
+        </div>
+        <div>
+          Model : {{ p.model }}
+        </div>
+        <div>
+            Prix : {{ p.prix }} €
+        </div>
+        <div class="col-md-auto"> 
+            <button (click)="addProduct(p.id)">Ajouter</button>
+          </div>
+    </div>
+    </div>
+</div>

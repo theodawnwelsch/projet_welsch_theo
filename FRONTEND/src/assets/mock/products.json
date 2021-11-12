@@ -1,0 +1,9 @@
+[
+    { "id": 1, "brand": "Samsung", "model": "Galaxy Z Flip3", "prix": 1100 },
+    { "id": 2, "brand": "Samsung", "model": "Galaxy Z Fold3", "prix": 1800 },
+    { "id": 3, "brand": "Samsung", "model": "Galaxy S21", "prix": 950},
+
+    { "id": 4, "brand": "Apple", "model": "iPhone 13 Pro", "prix": 1300 },
+    { "id": 5, "brand": "Apple", "model": "iPhone 13", "prix": 1030 }
+]
+  
