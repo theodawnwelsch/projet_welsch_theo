@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
       this.authService.postLogin(this.login?.value, this.password?.value).subscribe(
         (val) => {
           console.log("User logged in");
-          this.user$ = this.authService.getLogin(this.login?.value);
+          this.user$ = this.authService.postLogin(this.login?.value, this.password?.value);
         }
       )
     }

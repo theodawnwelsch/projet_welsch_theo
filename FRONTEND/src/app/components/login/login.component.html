@@ -24,6 +24,15 @@
                 <input type="password" id="password" class="form-control" formControlName="password">            
             </div>
         </div>        
-        <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Créer son compte</button>
+        <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Se connecter</button>
     </form>
 </div>
+
+<div *ngIf="(user$ | async) as user; else loading">
+    <p>Logged IN</p>
+    <app-recap [newUser] = "user"></app-recap>
+</div>
+  
+  <ng-template #loading>
+    Non loggé
+  </ng-template>

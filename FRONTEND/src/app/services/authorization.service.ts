@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Users } from '../models/users';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ApiInterceptor } from '../interceptor/api.interceptor';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class AuthorizationService {
 
   urlApiLogin: string = "/api/login";
-  urlApiAuth: string = "/api/client/";
+  urlApiSignin: string = "/api/signin";
 
   constructor(private Http: HttpClient) { }
 
@@ -23,8 +24,11 @@ export class AuthorizationService {
     return this.Http.post<Users>(this.urlApiLogin, data, httpOptions);
   }
 
-  public getLogin(login:string): Observable<Users>{
-    let data : string = "login=" + login;
-    return this.Http.get<Users>(this.urlApiAuth + login);
+  public postSignin(login:string, password:string, prenom:string, nom:string): Observable<Users>{
+    let data : string = "login=" + login + "&password=" + password + "&prenom=" + prenom + "&nom=" + nom;
+    let httpOptions = {
+      headers: new HttpHeaders({"Content-Type": "application/x-www-form-urlencoded"})
+    };
+    return this.Http.post<Users>(this.urlApiSignin, data, httpOptions);
   }
 }

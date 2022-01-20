@@ -8,6 +8,7 @@ use \Firebase\JWT\JWT;
 const JWT_SECRET = "makey1234567";
 
 require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 $options = [
     "attribute" => "token",
@@ -17,7 +18,7 @@ $options = [
     "algorithm" => ["HS256"],
     "secret" => JWT_SECRET,
     "path" => ["/api"],
-    "ignore" => ["/api/hello","/api/login","/api/createUser"],
+    "ignore" => ["/api/hello","/api/login", "/api/signin", "/api/old/login", "/api/createUser"],
     "error" => function ($response, $arguments) {
         $data = array('ERREUR' => 'Connexion', 'ERREUR' => 'JWT Non valide');
         $response = $response->withStatus(401);
@@ -32,7 +33,7 @@ function addHeaders(Response $response): Response {
     $origin = 'herokuapp';
 
     $response = $response->withHeader("Content-Type", "application/json")
-    ->withHeader("Access-Control-Allow-Origin", "https://tp05-2-welsch-theo.herokuapp.com")
+    ->withHeader("Access-Control-Allow-Origin", "https://final-welsch-theo.herokuapp.com")
     ->withHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
     ->withHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
     ->withHeader("Access-Control-Expose-Headers", "Authorization");
@@ -40,6 +41,9 @@ function addHeaders(Response $response): Response {
   return $response;
 
 }
+
+$app = AppFactory::create();
+
 function createJWT ($login){
 
     $issuedAt = time();
@@ -55,20 +59,92 @@ function createJWT ($login){
 }
 
 
-function getClient($request, $response, $args)
+function login($request, $response, $args)
 {
-    $login = $args['login'];
-    if($login){
-        $data["login"] = $login;
-        $token_jwt = createJWT($login);
-        $response = addHeaders($response);
-        $response = $response->withHeader("Authorization", "Bearer {$token_jwt}"); 
+    $body = $request->getParsedBody();
+    $login = $body["login"] ?? "";
+    $password = $body["password"] ?? "";
+
+    $err = $login == "" || $password == "";
+
+    if($err){
+        $data["erreur"] = "Erreur de saisie";
+        $response = $response->withStatus(400);
         $response->getBody()->write(json_encode($data));
-    }
-    else{
-        $response = $response->withStatus(401);
+        return $response;        
     }
 
+    global $entityManager;
+    $clientRepository = $entityManager->getRepository('Client');
+    $client = $clientRepository->findOneBy(array('login' => $login));
+
+ 
+    if($client == null || (!$password == $client->getPassword())){
+        $data["erreur"] = "Aucun client avec ce login et/ou password";
+        $response = $response->withStatus(403);
+        $response->getBody()->write(json_encode($data));
+        return $response;        
+    }
+
+    $data = array(
+        'prenom' => $client->getPrenom(),
+        'nom' => $client->getNom(),
+        'login' => $client->getLogin(),
+        'password' => $client->getPassword(),
+    );
+
+    $token_jwt = createJWT($login);
+    $response = addHeaders($response);
+    $response = $response->withHeader("Authorization", "Bearer {$token_jwt}"); 
+    $response->getBody()->write(json_encode($data));
+
+    return $response;
+}
+
+function signin($request, $response, $args)
+{
+    $body = $request->getParsedBody();
+    $login = $body["login"] ?? "";
+    $password = $body["password"] ?? "";
+    $prenom = $body["prenom"] ?? "";
+    $nom = $body["nom"] ?? "";
+
+
+ 
+    $err = $login == "" || $password == "" || $prenom == "" || $nom == "";
+    if($err)
+    {
+        $data["erreur"] = "Erreur de saisie.";
+        $response = $response->withStatus(400);
+        $response->getBody()->write(json_encode($data));
+
+        return $response;
+    }
+    global $entityManager;
+    $clientRepository = $entityManager->getRepository('Client');
+    $exist = $clientRepository->findOneBy(array('login' => $login));
+
+    if($exist)
+    {
+        $data["erreur"] = "Ce login existe déjà.";
+        $response = $response->withStatus(409);
+        $response->getBody()->write(json_encode($data));
+
+        return $response;
+    }
+
+    $client = new Client();
+    $client->setPrenom($prenom);
+    $client->setNom($nom);
+    $client->setLogin($login);
+    $client->setPassword($password);
+
+    $entityManager->persist($client);
+    $entityManager->flush();
+
+    $data["login"] = $login;
+    $response = addHeaders($response);
+    $response->getBody()->write(json_encode($data));
     return $response;
 }
 
@@ -95,10 +171,9 @@ function postClient($request, $response, $args)
       return $response;
 }
 
-
-$app = AppFactory::create();
-$app->post('/api/login', 'postClient');
-$app->get('/api/client/{login}', 'getClient');
+$app->post('/api/old/login', 'postClient');
+$app->post('/api/login', 'login');
+$app->post('/api/signin', 'signin');
 $app->add(new Tuupola\Middleware\JwtAuthentication($options));
     
 $app->run();
